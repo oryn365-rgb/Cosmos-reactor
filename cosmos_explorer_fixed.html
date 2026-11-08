@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#070b18">
+  <title>COSMOS Explorer | Explore Our Solar System</title>
+  <style>
+    :root {
+      --bg: #070b18;
+      --panel: rgba(15, 23, 45, .88);
+      --line: rgba(157, 180, 235, .18);
+      --text: #f1f5ff;
+      --muted: #aab7d3;
+      --accent: #8db7ff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; min-height: 100vh; color: var(--text);
+      background: radial-gradient(ellipse at 50% 0%, #17264a 0%, #0a1022 42%, var(--bg) 78%);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    }
+    button, input { font: inherit; }
+    .wrap { width: min(1120px, 100% - 28px); margin: auto; padding: 24px 0 40px; }
+    header { display:flex; justify-content:space-between; align-items:center; gap:16px; margin-bottom:22px; }
+    .brand { display:flex; align-items:center; gap:12px; }
+    .logo { width:42px; height:42px; display:grid; place-items:center; border-radius:14px; background:linear-gradient(135deg,#6b8eff,#9d70ef); font-size:22px; box-shadow:0 0 28px #718dff55; }
+    .eyebrow { color:#9dbdff; letter-spacing:.19em; font-size:10px; font-weight:800; }
+    h1 { font-size:clamp(23px,5vw,34px); line-height:1.05; margin:3px 0 0; letter-spacing:-.04em; }
+    .tag { border:1px solid var(--line); color:var(--muted); padding:8px 11px; border-radius:999px; font-size:11px; white-space:nowrap; }
+    .intro { color:var(--muted); margin:0 0 18px; font-size:14px; line-height:1.6; }
+    .layout { display:grid; grid-template-columns:minmax(0,1.55fr) minmax(260px,.8fr); gap:16px; }
+    .card { background:var(--panel); border:1px solid var(--line); border-radius:20px; overflow:hidden; box-shadow:0 18px 55px #0005; backdrop-filter:blur(12px); }
+    .scene-head { padding:17px 18px 0; display:flex; justify-content:space-between; align-items:center; gap:10px; }
+    .scene-head h2 { font-size:14px; margin:0; }
+    .live { color:#a8f0d0; font-size:10px; letter-spacing:.12em; }
+    #space { width:100%; height:410px; display:block; touch-action:pan-y; }
+    .hint { color:var(--muted); font-size:11px; padding:0 18px 16px; }
+    .side { padding:19px; }
+    .side-label { color:#9dbdff; font-size:10px; letter-spacing:.18em; font-weight:800; }
+    .planet-title { display:flex; align-items:center; gap:12px; margin:10px 0; }
+    #planetEmoji { font-size:36px; filter:drop-shadow(0 0 13px #fff5); }
+    h2 { margin:0; }
+    #planetName { font-size:25px; letter-spacing:-.04em; }
+    #planetType { color:var(--muted); font-size:12px; margin-top:3px; }
+    #planetDescription { color:#c0cbe0; font-size:13px; line-height:1.65; min-height:82px; }
+    .facts { display:grid; grid-template-columns:1fr 1fr; gap:9px; margin:16px 0; }
+    .fact { background:#ffffff08; border:1px solid #ffffff10; padding:11px; border-radius:12px; min-width:0; }
+    .fact small { display:block; color:var(--muted); font-size:10px; margin-bottom:5px; }
+    .fact strong { font-size:12px; overflow-wrap:anywhere; }
+    .planet-list { display:flex; flex-wrap:wrap; gap:7px; margin-top:15px; }
+    .planet-list button, .control-row button {
+      color:var(--text); background:#ffffff09; border:1px solid var(--line);
+      padding:8px 10px; border-radius:10px; font-size:11px; cursor:pointer;
+    }
+    button:hover { border-color:#91b4ff; }
+    button.active { background:#294474; border-color:#86aaff; }
+    .controls { margin-top:16px; padding:15px; }
+    .control-top { display:flex; justify-content:space-between; gap:10px; font-size:12px; margin-bottom:10px; }
+    #speedValue { color:#a9c5ff; }
+    input[type=range] { width:100%; accent-color:#8db7ff; }
+    .control-row { display:flex; gap:8px; margin-top:12px; }
+    .control-row button { flex:1; }
+    .note { color:var(--muted); font-size:10px; line-height:1.55; margin:12px 0 0; }
+    footer { color:#72809d; text-align:center; font-size:10px; margin-top:22px; letter-spacing:.13em; }
+    @media(max-width:760px) {
+      .wrap { width:min(100% - 20px,600px); padding-top:17px; }
+      header { align-items:flex-start; }
+      .tag { font-size:9px; }
+      .layout { grid-template-columns:1fr; }
+      #space { height:330px; }
+      #planetDescription { min-height:0; }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <header>
+      <div class="brand">
+        <div class="logo">✦</div>
+        <div><div class="eyebrow">AN INTERACTIVE SPACE JOURNEY</div><h1>COSMOS Explorer</h1></div>
+      </div>
+      <div class="tag">SOLAR SYSTEM · 01</div>
+    </header>
+    <p class="intro">Travel through our neighbourhood in space. Select a planet, explore its facts, and watch the solar system move.</p>
+
+    <section class="layout">
+      <div>
+        <div class="card">
+          <div class="scene-head"><h2>Our Solar System</h2><span class="live">● SIMULATION LIVE</span></div>
+          <canvas id="space" aria-label="Animated solar system. Select a planet below to learn about it."></canvas>
+          <div class="hint">Tap a planet in the scene or choose one below. Planet sizes and distances are not to scale.</div>
+        </div>
+        <div class="card controls">
+          <div class="control-top"><strong>Simulation speed</strong><strong id="speedValue">1.0×</strong></div>
+          <input id="speed" type="range" min="0" max="4" step=".25" value="1" aria-label="Simulation speed">
+          <div class="control-row">
+            <button id="playBtn" class="active">Ⅱ Pause</button>
+            <button id="resetBtn">↺ Reset</button>
+          </div>
+          <p class="note">This is an educational illustration, not a scale model. Orbital paths and speeds are simplified so the planets remain visible.</p>
+        </div>
+      </div>
+
+      <aside class="card side">
+        <div class="side-label">PLANET DATABASE</div>
+        <div class="planet-title"><span id="planetEmoji">☀️</span><div><h2 id="planetName">The Sun</h2><div id="planetType">Star</div></div></div>
+        <p id="planetDescription">The star at the centre of our solar system. Its gravity holds the planets in orbit.</p>
+        <div class="facts">
+          <div class="fact"><small>DIAMETER</small><strong id="diameter">1.39 million km</strong></div>
+          <div class="fact"><small>DAY LENGTH</small><strong id="day">About 25 days</strong></div>
+          <div class="fact"><small>ORBITAL PERIOD</small><strong id="year">—</strong></div>
+          <div class="fact"><small>AVERAGE DISTANCE</small><strong id="distance">—</strong></div>
+        </div>
+        <div class="side-label">CHOOSE A WORLD</div>
+        <div class="planet-list" id="planetButtons"></div>
+      </aside>
+    </section>
+    <footer>COSMOS EXPLORER · KEEP LOOKING UP</footer>
+  </main>
+
+  <script>
+    const planets = [
+      {name:"The Sun",emoji:"☀️",type:"Star",color:"#ffbf45",size:12,r:0,diameter:"1.39 million km",day:"About 25 days",year:"—",distance:"Centre",desc:"The star at the centre of our solar system. Its gravity holds the planets in orbit and its energy makes life on Earth possible."},
+      {name:"Mercury",emoji:"☿",type:"Terrestrial planet",color:"#aaa9a5",size:3,r:35,diameter:"4,879 km",day:"58.6 Earth days",year:"88 Earth days",distance:"57.9 million km",desc:"The smallest planet and the closest to the Sun. With almost no atmosphere to retain heat, its temperatures vary dramatically."},
+      {name:"Venus",emoji:"♀",type:"Terrestrial planet",color:"#e4b56e",size:5,r:53,diameter:"12,104 km",day:"243 Earth days",year:"225 Earth days",distance:"108.2 million km",desc:"Venus has a thick carbon dioxide atmosphere and an intense greenhouse effect. Its surface is hot enough to melt lead."},
+      {name:"Earth",emoji:"🌍",type:"Terrestrial planet",color:"#4d9df0",size:5.5,r:72,diameter:"12,742 km",day:"23 h 56 min",year:"365.25 days",distance:"149.6 million km",desc:"Our home planet is the only world currently known to support life. Liquid water covers about 71% of its surface."},
+      {name:"Mars",emoji:"♂",type:"Terrestrial planet",color:"#d96c4c",size:4, r:91,diameter:"6,779 km",day:"24 h 37 min",year:"687 Earth days",distance:"227.9 million km",desc:"The Red Planet has giant volcanoes, ancient river valleys and polar ice caps. Scientists are investigating whether microbial life ever existed there."},
+      {name:"Jupiter",emoji:"♃",type:"Gas giant",color:"#d5ad83",size:9,r:119,diameter:"139,820 km",day:"9 h 56 min",year:"11.86 Earth years",distance:"778.6 million km",desc:"The largest planet in our solar system. Its Great Red Spot is a giant storm that has been observed for centuries."},
+      {name:"Saturn",emoji:"♄",type:"Gas giant",color:"#e8d29a",size:8,r:149,diameter:"116,460 km",day:"About 10.7 hours",year:"29.4 Earth years",distance:"1.43 billion km",desc:"Saturn is famous for its spectacular rings, made mostly of countless pieces of ice and rocky material."},
+      {name:"Uranus",emoji:"♅",type:"Ice giant",color:"#8dd9db",size:6,r:179,diameter:"50,724 km",day:"17 h 14 min",year:"84 Earth years",distance:"2.87 billion km",desc:"Uranus rotates on an extreme tilt, almost rolling around the Sun. It has a cold atmosphere containing hydrogen, helium and methane."},
+      {name:"Neptune",emoji:"♆",type:"Ice giant",color:"#467bdf",size:6,r:207,diameter:"49,244 km",day:"16 h 6 min",year:"164.8 Earth years",distance:"4.50 billion km",desc:"Neptune is a distant, windy ice giant. It takes almost 165 Earth years to complete one orbit around the Sun."}
+    ];
+
+    const canvas = document.getElementById("space");
+    const ctx = canvas.getContext("2d");
+    const buttons = document.getElementById("planetButtons");
+    let selected = 0, angle = 0, speed = 1, playing = true, last = 0;
+    let width = 0, height = 0, stars = [];
+
+    planets.forEach((p,i) => {
+      const b = document.createElement("button");
+      b.textContent = p.emoji + " " + (i===0 ? "Sun" : p.name);
+      b.addEventListener("click", () => selectPlanet(i));
+      buttons.appendChild(b);
+    });
+
+    /** @param {number} i - Index of the selected planet. */
+    function selectPlanet(i) {
+      selected = i;
+      const p = planets[i];
+      document.getElementById("planetEmoji").textContent = p.emoji;
+      document.getElementById("planetName").textContent = p.name;
+      document.getElementById("planetType").textContent = p.type;
+      document.getElementById("planetDescription").textContent = p.desc;
+      document.getElementById("diameter").textContent = p.diameter;
+      document.getElementById("day").textContent = p.day;
+      document.getElementById("year").textContent = p.year;
+      document.getElementById("distance").textContent = p.distance;
+      [...buttons.children].forEach((b,n)=>b.classList.toggle("active",n===i));
+    }
+
+    function resize() {
+      const rect = canvas.getBoundingClientRect();
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      width = rect.width; height = rect.height;
+      canvas.width = Math.round(width*dpr);
+      canvas.height = Math.round(height*dpr);
+      ctx.setTransform(dpr,0,0,dpr,0,0);
+      stars = Array.from({length:100},()=>({x:Math.random()*width,y:Math.random()*height,a:.2+Math.random()*.7,s:.4+Math.random()*1.2}));
+    }
+
+    /** @param {number} time - Animation frame timestamp in milliseconds. */
+    function draw(time) {
+      const dt = Math.min((time-last)/1000,.05); last = time;
+      if(playing) angle += dt*speed*.45;
+      ctx.clearRect(0,0,width,height);
+      for(const star of stars) {
+        ctx.fillStyle = `rgba(220,230,255,${star.a})`;
+        ctx.beginPath(); ctx.arc(star.x,star.y,star.s,0,Math.PI*2); ctx.fill();
+      }
+
+      const cx=width/2, cy=height/2, scale=Math.min(width/460,height/390,1);
+      const sunGlow=ctx.createRadialGradient(cx,cy,2,cx,cy,35*scale);
+      sunGlow.addColorStop(0,"#fff7c8"); sunGlow.addColorStop(.25,"#ffc34d");
+      sunGlow.addColorStop(1,"rgba(255,130,20,0)");
+      ctx.fillStyle=sunGlow; ctx.beginPath(); ctx.arc(cx,cy,35*scale,0,Math.PI*2); ctx.fill();
+      ctx.fillStyle="#ffe18b"; ctx.beginPath(); ctx.arc(cx,cy,11*scale,0,Math.PI*2); ctx.fill();
+
+      const orbitScale = Math.min(scale, (Math.min(width/2-18,height/2-15))/(210*scale));
+      planets.slice(1).forEach((p,index)=>{
+        const r=p.r*orbitScale;
+        ctx.strokeStyle="rgba(164,185,230,.22)";
+        ctx.lineWidth=1; ctx.beginPath(); ctx.ellipse(cx,cy,r,r*.67,0,0,Math.PI*2); ctx.stroke();
+        const a=angle*(1.55/Math.pow(index+1,.55))+index*.85;
+        const x=cx+Math.cos(a)*r, y=cy+Math.sin(a)*r*.67;
+        if(index===5) {
+          ctx.strokeStyle="#d9c493";ctx.lineWidth=2.5*scale;
+          ctx.beginPath();ctx.ellipse(x,y,p.size*1.8*scale,p.size*.85*scale,.25,0,Math.PI*2);ctx.stroke();
+        }
+        ctx.fillStyle=p.color;ctx.shadowColor=p.color;ctx.shadowBlur=selected===index+1?17:5;
+        ctx.beginPath();ctx.arc(x,y,p.size*scale+(selected===index+1?2:0),0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
+        if(selected===index+1) {
+          ctx.strokeStyle="#fff";ctx.lineWidth=1;ctx.beginPath();ctx.arc(x,y,p.size*scale+7,0,Math.PI*2);ctx.stroke();
+        }
+      });
+      requestAnimationFrame(draw);
+    }
+
+    canvas.addEventListener("click", e=>{
+      const rect=canvas.getBoundingClientRect(), x=e.clientX-rect.left, y=e.clientY-rect.top;
+      const cx=width/2,cy=height/2,scale=Math.min(width/460,height/390,1);
+      const orbitScale=Math.min(scale,(Math.min(width/2-18,height/2-15))/(210*scale));
+      let best=-1,bestDist=Infinity;
+      planets.slice(1).forEach((p,index)=>{
+        const r=p.r*orbitScale,a=angle*(1.55/Math.pow(index+1,.55))+index*.85;
+        const px=cx+Math.cos(a)*r,py=cy+Math.sin(a)*r*.67;
+        const d=Math.hypot(x-px,y-py);
+        if(d<Math.max(18,p.size*scale+9)&&d<bestDist){best=index+1;bestDist=d;}
+      });
+      if(best>=0)selectPlanet(best);
+    });
+
+    document.getElementById("speed").addEventListener("input",e=>{
+      speed=Number(e.target.value);
+      document.getElementById("speedValue").textContent=speed.toFixed(2).replace(/0$/,"")+"×";
+    });
+    document.getElementById("playBtn").addEventListener("click",e=>{
+      playing=!playing;e.target.textContent=playing?"Ⅱ Pause":"▶ Play";
+      e.target.classList.toggle("active",playing);
+    });
+    document.getElementById("resetBtn").addEventListener("click",()=>{
+      angle=0;speed=1;playing=true;
+      document.getElementById("speed").value=1;
+      document.getElementById("speedValue").textContent="1.0×";
+      document.getElementById("playBtn").textContent="Ⅱ Pause";
+      document.getElementById("playBtn").classList.add("active");
+      selectPlanet(0);
+    });
+
+    window.addEventListener("resize",resize);
+    resize();selectPlanet(0);requestAnimationFrame(draw);
+  </script>
+</body>
+</html>
